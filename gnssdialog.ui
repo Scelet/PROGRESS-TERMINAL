@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GnssDialog</class>
+ <widget class="QDialog" name="GnssDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>633</width>
+    <height>380</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>GNSS</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_7">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QPushButton" name="refreshPushButton">
+           <property name="text">
+            <string>Refresh</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_2">
+           <property name="title">
+            <string>GNSS Reset</string>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QPushButton" name="gnssResetPushButton">
+              <property name="text">
+               <string>Reset</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="gnssResetTypeComboBox">
+              <item>
+               <property name="text">
+                <string>Cold</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Warm</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Hot</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QGroupBox" name="trackModeGroupBox">
+           <property name="minimumSize">
+            <size>
+             <width>75</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16666666</width>
+             <height>110</height>
+            </size>
+           </property>
+           <property name="title">
+            <string>Track mode</string>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QRadioButton" name="trackRadioButton">
+              <property name="text">
+               <string>Track</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="SingleRadioButton">
+              <property name="text">
+               <string>Single</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="StopRadioButton">
+              <property name="text">
+               <string>Stop</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="gnssGraphTypeComboBox">
+           <item>
+            <property name="text">
+             <string>Signal</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Polar</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>GNSS</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QRadioButton" name="gpsRadioButton">
+            <property name="text">
+             <string>GPS</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="bduRadioButton">
+            <property name="text">
+             <string>BDU</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="gpsBduRadioButton">
+            <property name="text">
+             <string>GPS+BDU</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="gpsGloRadioButton">
+            <property name="text">
+             <string>GPS+GLO</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <widget class="QRadioButton" name="gpsGalRadioButton">
+            <property name="text">
+             <string>GPS+GAL</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="gpsGloGalRadioButton">
+            <property name="text">
+             <string>GPS+GLO+GAL</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="gpsBduGalRadioButton">
+            <property name="text">
+             <string>GPS+BDU+GAL</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="isPosLabel">
+         <property name="text">
+          <string>Position :</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="utsTimeLabel">
+         <property name="text">
+          <string>UTC time : </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="dateLabel">
+         <property name="text">
+          <string>Date :</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="latLabel">
+         <property name="text">
+          <string>lat :</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lonLabel">
+         <property name="text">
+          <string>lon :</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="altLabel">
+         <property name="text">
+          <string>Alt :</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
