@@ -294,7 +294,12 @@ void NetworkDialog::on_refreshPsdPushButton_clicked()
     {
         infoText = infoText.sliced(infoText.indexOf("-")+1,infoText.indexOf(")")-infoText.indexOf("-")-1);
         quantPdp = infoText.toInt();
-    } else qDebug() << "networkdialog wrong answer on CGDCONT = "<<infoText;
+    } else
+    {
+        m_ui->refreshPsdPushButton->setEnabled(true);
+        qDebug() << "networkdialog wrong answer on CGDCONT = "<<infoText;
+        return;
+    }
 
     //create columns
     QStringList header;
