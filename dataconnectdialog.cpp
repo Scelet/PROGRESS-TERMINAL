@@ -131,6 +131,15 @@ void DataConnectDialog::on_connectPushButton_clicked()
                 return;
             }
         }//wait for response
+        if(textData.indexOf("OK")>=0)//beckause of bug in 1803 : do not answer +ZIPCALL
+        {
+            m_ui->tcpIpPushButton->setEnabled(true);
+            m_ui->ipByNamePushButton->setEnabled(true);
+            m_ui->tcpIpSendPushButton->setEnabled(true);
+            m_ui->tcpServerPushButton->setEnabled(true);
+            m_ui->ftpConnectPushButton->setEnabled(true);
+            m_ui->fotaStartPushButton->setEnabled(true);
+        }
         m_ui->connectPushButton->setText(tr("Disconnect"));
     }
     else if (m_ui->connectPushButton->text() == tr("Disconnect"))
