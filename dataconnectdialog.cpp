@@ -69,8 +69,11 @@ QString DataConnectDialog::getAnswer(const QString &data)
         {
             infoText = QString::fromStdString(textData.toStdString());
             //qDebug() << "dataconnectdialog get data0" << infoText;
-            infoText.resize(infoText.size()-6);// cut "OK" from answer
-            if(infoText.size()>2)infoText=infoText.sliced(2);
+            if(infoText.size()>6)
+            {
+                infoText.resize(infoText.size()-6);// cut "OK" from answer
+                if(infoText.size()>2)infoText=infoText.sliced(2);
+            }
             //qDebug() << "dataconnectdialog get data1" << infoText;
             return infoText;
             break;
@@ -103,9 +106,12 @@ void DataConnectDialog::on_connectPushButton_clicked()
 {
     if(m_ui->connectPushButton->text() == tr("Connect"))
     {
+        QStringList state;
+        QString connState;
         m_ui->connectPushButton->setEnabled(false);
         textData = "";//erase console output buffer
-        emit getData("AT+ZIPCALL=1\r\n");//send data to port
+        if(m_ui->dataCallComboBox->currentIndex()==0)emit getData("AT+ZIPCALL=1\r\n");//send data to port
+        else if(m_ui->dataCallComboBox->currentIndex()==1)emit getData("AT+ZECMCALL=1\r\n");//send data to port
         vaitForOk();
         for(int i=0; i<20; i++){
             delay(500);
@@ -140,12 +146,23 @@ void DataConnectDialog::on_connectPushButton_clicked()
             m_ui->ftpConnectPushButton->setEnabled(true);
             m_ui->fotaStartPushButton->setEnabled(true);
         }
+        if(m_ui->dataCallComboBox->currentIndex()==1)
+        {
+            QString ecmAnswer = getAnswer("AT+ZECMCALL?\r\n");
+            if(ecmAnswer.indexOf("ZECMCALL: IPV4,"))
+            {
+                state = ecmAnswer.split(",");
+                m_ui->ipLabel->setText(state[1]);
+            }
+
+        }
         m_ui->connectPushButton->setText(tr("Disconnect"));
     }
     else if (m_ui->connectPushButton->text() == tr("Disconnect"))
     {
         textData = "";//erase console output buffer
-        emit getData("AT+ZIPCALL=0\r\n");//send data to port
+        if(m_ui->dataCallComboBox->currentIndex()==0)emit getData("AT+ZIPCALL=0\r\n");//send data to port
+        else if(m_ui->dataCallComboBox->currentIndex()==1)emit getData("AT+ZECMCALL=0\r\n");//send data to port
         vaitForOk();
         for(int i=0; i<20; i++){
             delay(500);
@@ -190,28 +207,44 @@ void DataConnectDialog::on_refreshPushButton_clicked()
     }
     else m_ui->statusLabel->setText("Answer on 'AT+GMR' ="+ gmrAnswer);
 
-    textData = "";//erase console output buffer
-    emit getData("AT+ZIPCALL?\r\n");
-    for(int i=0; i<10; i++){
-        delay(500);
-        if(textData.indexOf("OK")>=0) break;
-        else if(textData.indexOf("ERROR")>=0)
+    QStringList state;
+    QString connState;
+    QString ipAnswer = getAnswer("AT+ZIPCALL?\r\n");//+ZIPCALL: 1,11.124.4.215 //+ZIPCALL: 0 //ERROR
+    if(ipAnswer.indexOf("ERROR")>=0)//maybe ECM data call connected
+    {
+        QString ecmAnswer = getAnswer("AT+ZECMCALL?\r\n"); //+ZECMCALL: IPV4,11.124.4.215,11.124.4.40,213.87.142.85,213.87.142.84 //+ZECMCALL: IPV4, //ERROR
+        if(ecmAnswer.indexOf("+ZECMCALL: IPV4,")>=0)state = ecmAnswer.split(",");
+        else //can't be ERROR or else after ERROR on ZIPCALL
         {
+            m_ui->statusLabel->setText("Answer on 'AT+ZECMCALL?' ="+ ecmAnswer);
             m_ui->refreshPushButton->setEnabled(true);
-            qDebug() << "dataconnectdialog wrong ZIPCALL?" << textData;
             return;
         }
-    }//wait for response
-    if(textData.indexOf("OK")<0 && textData.indexOf("ERROR")<0)
+        if(state.size()>2)
+        {
+            m_ui->dataCallComboBox->setCurrentIndex(1);
+            connState="1";
+        }
+        else if (state.size()==2)
+        {
+            m_ui->dataCallComboBox->setCurrentIndex(1);
+            connState="0";
+        }
+    }
+    if(ipAnswer.indexOf("ZIPCALL:")>=0)
     {
-        m_ui->statusLabel->setText("Answer on 'AT+ZIPCALL?' ="+ textData);
+        m_ui->dataCallComboBox->setCurrentIndex(0);
+        state = ipAnswer.split(":");
+        connState = state[1].sliced(1,1);
+    }
+    if(ipAnswer.indexOf("ZIPCALL:")<0 && ipAnswer.indexOf("ERROR")<0)
+    {
+        m_ui->statusLabel->setText("Answer on 'AT+ZIPCALL?' ="+ ipAnswer);
         m_ui->refreshPushButton->setEnabled(true);
         return;
     }
 
-    QString connState = QString::fromStdString(textData.toStdString());
-    QStringList state = connState.split(":");
-    connState = state[1].sliced(1,1);
+
     //qDebug() << "dataconnectdialog zipcall" << connState;
     if(connState == "0")
     {
@@ -225,7 +258,8 @@ void DataConnectDialog::on_refreshPushButton_clicked()
     }
     else if (connState == "1")
     {
-        m_ui->ipLabel->setText(state[1].sliced(3,state[1].indexOf("\r")-2));
+        if(m_ui->dataCallComboBox->currentIndex()==1)m_ui->ipLabel->setText(state[1]);
+        else if(m_ui->dataCallComboBox->currentIndex()==0)m_ui->ipLabel->setText(state[1].sliced(3,state[1].indexOf("\r")-2));
         m_ui->tcpIpPushButton->setEnabled(true);
         m_ui->ipByNamePushButton->setEnabled(true);
         m_ui->tcpServerPushButton->setEnabled(true);
